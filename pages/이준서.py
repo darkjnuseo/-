@@ -1,58 +1,46 @@
 import streamlit as st
 
-# 1. 페이지 설정 (최상단 필수 배치로 에러 원천 차단)
+# 1. 페이지 기본 설정 및 디자인 (Emoji 활용)
 st.set_page_config(
-    page_title="FitForge 다이어트 솔루션",
-    page_icon="🔥",
-    layout="centered"
+    page_title="FitMeal & Move - 나만의 다이어트 가이드",
+    page_icon="🥗",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# 2. 대시보드 타이틀 및 서비스 소개
-st.title("🔥 FitForge 스마트 다이어트 솔루션")
-st.markdown("### \"당신의 신체 데이터에 맞춘 고정밀 식단 & 운동 매칭 시스템\"")
-st.markdown("키와 몸무게를 입력하면 FitForge의 알고리즘이 당신만을 위한 맞춤형 다이어트 가이드를 실시간으로 설계합니다.")
-st.markdown("---")
+# 간단한 CSS 스타일링으로 가독성 높이기
+st.markdown("""
+    <style>
+    .main-title { font-size: 2.5rem; font-weight: bold; color: #2E7D32; text-align: center; margin-bottom: 10px; }
+    .sub-title { font-size: 1.2rem; color: #555555; text-align: center; margin-bottom: 30px; }
+    .feature-box { padding: 20px; border-radius: 10px; background-color: #F1F8E9; border-left: 5px solid #7CB342; margin-bottom: 15px; }
+    .recommend-box { padding: 15px; border-radius: 8px; background-color: #FFFFFF; border: 1px solid #E0E0E0; margin-top: 10px; }
+    </style>
+""", unsafe_index=True)
 
-# 3. 사이드바 - 신체 정보 입력 세션
-st.sidebar.header("📋 신체 데이터 입력")
-gender = st.sidebar.radio("성별 선택", ["남성", "여성"], index=0)
-age = st.sidebar.number_input("만 나이", min_value=1, max_value=120, value=26, step=1)
-height = st.sidebar.number_input("키 (cm)", min_value=100.0, max_value=250.0, value=173.0, step=0.1)
-weight = st.sidebar.number_input("현재 몸무게 (kg)", min_value=30.0, max_value=200.0, value=78.0, step=0.1)
 
-# 4. 연산 및 예외 처리 구역
-try:
-    height_m = height / 100
-    bmi = weight / (height_m ** 2)
+# ==========================================
+# 사이드바: 앱 소개 및 바로가기
+# ==========================================
+st.sidebar.image("https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500", use_container_width=True)
+st.sidebar.title("🥗 FitMeal & Move")
+st.sidebar.info("당신의 체형과 목표에 딱 맞는 운동과 식단을 제안하는 스마트 다이어트 솔루션입니다.")
+
+# 메뉴 선택
+menu = st.sidebar.radio(
+    "원하는 메뉴를 선택하세요:",
+    ["✨ 앱 주요 기능 소개", "📊 1분 체형 진단 & 맞춤 제안"]
+)
+
+st.sidebar.markdown("---")
+st.sidebar.caption("© 2026 FitMeal & Move Co. All rights reserved.")
+
+
+# ==========================================
+# 메뉴 1: 앱 주요 기능 소개 (눈에 띄는 배치)
+# ==========================================
+if menu == "✨ 앱 주요 기능 소개":
+    st.markdown("<div class='main-title'>🥗 FitMeal & Move를 소개합니다!</div>", unsafe_index=True)
+    st.markdown("<div class='sub-title'>체중 감량, 더 이상 헤매지 마세요. 과학적인 분석으로 시작하세요.</div>", unsafe_index=True)
     
-    # 기초대사량(BMR) 계산 공식 (Mifflin-St Jeor)
-    if gender == "남성":
-        bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5
-        std_weight = (height_m ** 2) * 22
-    else:
-        bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161
-        std_weight = (height_m ** 2) * 21
-        
-    # 활동 대사량 (보통 활동 기준)
-    tdee = bmr * 1.375
-
-    # BMI 비만도 판정 및 시각화용 변수 설정
-    if bmi < 18.5:
-        status, color, bar_val = "저체중 🟡", "blue", 0.25
-    elif bmi < 23.0:
-        status, color, bar_val = "정상 체중 🟢", "green", 0.50
-    elif bmi < 25.0:
-        status, color, bar_val = "과체중 🟠", "orange", 0.75
-    else:
-        status, color, bar_val = "비만 🔴", "red", 1.0
-
-    # -----------------------------------------------------------------
-    # 기능 1: 눈에 잘 띄는 신체정보 대시보드 제공
-    # -----------------------------------------------------------------
-    st.subheader("📊 1. 나의 신체분석 리포트")
-    
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric(label="현재 체질량지수 (BMI)", value=f"{bmi:.1f}", delta=status)
-    with col2:
-        st.metric(label="하루
+    st.image("
