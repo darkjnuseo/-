@@ -5,7 +5,7 @@ import pandas as pd
 
 # 1. 페이지 설정
 st.set_page_config(
-    page_title="폭식 브레이크 (Binge Break)",
+    page_title="폭식 예방 프로그램 (Binge Break)",
     page_icon="🍎",
     layout="centered"
 )
